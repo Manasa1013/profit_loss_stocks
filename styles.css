@@ -1,0 +1,14 @@
+button{
+    box-sizing: border-box;
+    border: 2px solid salmon;
+    background-color: aqua;
+    color: #24292E;
+    padding : 1rem;
+    margin : 1rem;
+    text-align: end;
+    border-bottom-right-radius: 1.5rem ;
+    outline: none;
+}
+button:hover{
+    background-color: aliceblue;
+}
