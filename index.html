@@ -3,19 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="styles.css">
     <title>Document</title>
 </head>
 <body id="body">
-    <input type="text" id ="price"placeholder="Enter the stock price when you bought" value="50000"/>
+
+    Enter the amount with which you bought stocks:<br>
+    <input 
+    type="text" 
+    id ="price" 
+    placeholder="Enter the stock price when you bought" 
+    name="price" value="45612"
+    pattern="[0-9]"
+     />
     <br><br>
-    <input type="text" id="count" placeholder="Enter the no of stocks you bought" value="5"
+    Enter the number of stocks you bought<br>
+    <input 
+    type="text"
+     id="count"
+      placeholder="Enter the no of stocks you bought" 
+      name="count"
+       value="6"
     />
+
     <br>
-    <button type="button" id="button" >Calculate p/l</button>
-    <br><br>
+    <button type="button" id="btn" >Calculate p/l</button>
     
+    <button type="reset" id="reset">Reset</button>
     <br>
+    <div id ="div-display"></div>
+    <br><br>
+    <br>
+    <div id = "div-result">
+        
+    </div>
 </body>
-<script  src="app.js" ></script>
+<script src="app.js" type="text/javascript"></script>
 </html>
