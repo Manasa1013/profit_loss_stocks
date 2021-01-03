@@ -1,76 +1,139 @@
-let priceId =  document.querySelector("#price")
-let priceIdValue = parseInt(priceId,10)
-a(typeof(priceIdValue),priceIdValue)
-let divDisplay = document.createElement('div')
-document.body.appendChild(divDisplay)
-let text = ""
-// let a = prompt("enter the stock price on the day you bought")
-let countId = document.querySelector("#count")
-var currentPrice = 0
+let priceEvent = document.querySelector("#price")
+let countEvent = document.querySelector("#count")
+let divContent = document.querySelector("#div-display")
+let divResult = document.querySelector("#div-result")
+let btnID = document.querySelector("#btn")
+let resetID = document.querySelector("#reset")
 
 
-function apiLink(marketprice) {
-    return "https://apiforstocks.manasa1998.repl.co/marketprice/today.json?text="+marketprice
-} 
+var currentPrice = "12345"
+// function apiLink(marketprice) {
+//     return "https://apiforstocks.manasa1998.repl.co/marketprice/today.json?text="+marketprice
+// } 
 
-function doFetch(marketprice){
-    fetch(apiLink(marketprice)).then(resp => resp.json())
-    .then(json => 
-        {
-        let stringCurrentPrice = json.contents.marketprice
-            a(typeof(stringCurrentPrice))
-        currentPrice = parseInt(stringCurrentPrice,10)
-        a(typeof(currentPrice))
-        divDisplay.innerText = "Today's stock price is "+stringCurrentPrice 
-    })
-}
+// function doFetch(marketprice){
+//     fetch(apiLink(marketprice)).then(resp => resp.json())
+//     .then(json => 
+//         {
+//         currentPrice = json.contents.marketprice
+            
+//         currentPrice = parseInt(currentPrice,10)
+        
+//     })
+// }
 
-doFetch("today's market price")
+// doFetch("today's market price")
 
 
 
+divContent.textContent = `Today's current stock price is ₹${currentPrice}`
 
-
-let resultPrice=0;
-let profitPc =0;
-let lossPc =0;
-  
-function calculator(){
+function calcProfitLoss(){
+    let textPrice = priceEvent.value
+    let textCount = countEvent.value
     
-    divDisplay.innerText = "Going to display...result"
-    if(priceIdValue>0){ //user entered correct input
-        a(typeof(priceIdValue),typeof(currentPrice))
+    textPrice = parseInt(textPrice,10)
+    textCount = parseInt(textCount,10)
+    currentPrice = parseInt(currentPrice,10)
+    
+    console.log("textPrice"+typeof(textPrice)+textPrice)
 
-        let perShareResult = currentPrice -priceIdValue //perone stock the profit or loss calc
-        a(currentPrice)
-            resultPrice = perShareResult *countId.value //whole profit or loss
-            a(resultPrice,perShareResult)
-            if(resultPrice>0){ //when profit
-                console.log(`profit  is ${resultPrice}`)
-                divDisplay.innerText += `Your balance for today ${resultPrice}`; 
-                profitPc = (perShareResult/currentPriceId.value)*100; //calc percentage profit
-                divDisplay.innerText += `\nyour profit %age is ${profitPc}`
-                //add bull or some icon indicating profits in share terms 
-            }
-             if(resultPrice<0){
-                console.log(`loss is ${resultPrice}`)
-                divDisplay.innerText += `Your loss for today ${(-1)*resultPrice}`; 
-                lossPc =(-1)*(perShareResult/currentPrice)*100;
-                divDisplay.innerText += `\nyour loss %age is ${lossPc}`
-                if(lossPc>49){ //if loss is more than 50%
-                    divDisplay.innerText += ("😢😢")
-                     //add bull or some icon indicating profits in share terms 
-                    document.body.style.backgroundColor = "orange"
-                }
-            }
-           
-        //fetch today's price from api calls
+    console.log(currentPrice)
+    console.log(typeof(currentPrice))
+    let data =
+     `Summary:
+    <li>Stock price when bought ₹<strong>${textPrice}</strong></li>
+    <li>Number of stocks bought ${textCount}</li>`
+    divResult.innerHTML +=data      
+    
+    let datapl = ""
+    
+
+    if(textPrice>0){
+        
+    let perShareResult = currentPrice - textPrice
+    console.log(perShareResult+" "+typeof(perShareResult))
+    let resultPrice = perShareResult * textCount
+    console.log(resultPrice+" "+typeof(resultPrice))
+    if(resultPrice>0){
+        let profitage = profitFunction(textPrice,perShareResult,textCount)
+        datapl = 
+        `<li>Profit earned per share is 
+                <strong>${perShareResult}</strong>
+                </li>
+        <li>Net Profit is 
+        <strong>${resultPrice}</strong>
+        </li>
+        <li>Profit percentage is <strong>${profitage}</strong></li>`
+        document.body.style.backgroundColor = "white"
     }
-}
-let button = document.querySelector("#button") //button referred using querySelector
-button.addEventListener("click",calculator,false) //onclicking the button calculator is called
+    else{
+        if(resultPrice<0){
+            let lossage = lossFunction(textPrice,perShareResult,textCount)
+            datapl = 
+            `<li>Loss per share is 
+                    <strong>${(-1)*perShareResult}</strong>
+                    </li>
+            <li>Net Loss is 
+            <strong>${(-1)*resultPrice}</strong>
+            </li>
+            <li>Loss percentage is <strong>${lossage}😥😥</strong></li>`
+            if(lossage>50)
+            { document.body.style.backgroundColor = "orange"}
 
+        }
+        else{
+            console.log("You earned neither profit nor loss \n1.Maybe you bought stocks today itself:)\n2.There is no rise or fall in the stocks you bought")
+            datapl =  `<li>You earned neither profit nor loss</li>
+            <h4>1.Maybe you bought stocks today itself:)</h4>
+            <h4>2.There is no rise or fall in the stocks since the day you bought<h4>
+            </li>`
+            document.body.style.backgroundColor = "white"
+        }
+    }
+    
+    }
+    else{
+        divResult.innerHTML = `<h3>enter numbers/positive values</h3>`
+        document.body.style.backgroundColor = "white"
+        console.log("enter values/positive values")
+    }
+    
+    divResult.innerHTML +=datapl
 
-function a(...args){
-    console.log(...args)
 }
+
+function profitFunction(exTextPrice,exPerShareResult,exTextCount){
+    let profit = exPerShareResult
+    console.log(`Profit earned whole ${profit*exTextCount}`)
+    console.log(`profit per share is ${profit}`)
+    let profitPerc = (profit/exTextPrice) *100
+    console.log(`profit percentage per share is ${profitPerc}`)
+    return profitPerc
+}
+
+function lossFunction(exTextPrice,exPerShareResult,exTextCount){
+    let loss = (-1)*exPerShareResult
+    console.log(`Loss earned whole ${loss*exTextCount}`)
+    console.log(`loss per share is ${loss}`)
+    let lossPerc = (loss/exTextPrice) * 100
+    console.log(`loss percentage per share is ${lossPerc}`)
+    return lossPerc
+}
+function resetData(){
+        priceEvent.value =""
+        countEvent.value =""
+        divContent.textContent = `Today's current stock price is ₹${currentPrice}`
+        divResult.innerHTML = ``
+        document.body.style.backgroundColor = "white"
+        
+    
+}
+
+btnID.addEventListener('click',()=>{
+    calcProfitLoss();
+    priceEvent.value=""
+    countEvent.value = ""
+},false)
+
+resetID.addEventListener('click',resetData,false)
