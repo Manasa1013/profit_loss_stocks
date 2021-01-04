@@ -1,3 +1,9 @@
+var currentPrice = ""
+
+
+
+
+
 let priceEvent = document.querySelector("#price")
 let countEvent = document.querySelector("#count")
 let divContent = document.querySelector("#div-display")
@@ -5,28 +11,29 @@ let divResult = document.querySelector("#div-result")
 let btnID = document.querySelector("#btn")
 let resetID = document.querySelector("#reset")
 
+//api work out,css for this,other apps,start writing blog--day(4)
 
-var currentPrice = "12345"
-// function apiLink(marketprice) {
-//     return "https://apiforstocks.manasa1998.repl.co/marketprice/today.json?text="+marketprice
-// } 
+function apiLink(marketprice) {
+   return "https://apiforstocks.manasa1998.repl.co/marketprice/today.json?text="+marketprice
+ } 
 
-// function doFetch(marketprice){
-//     fetch(apiLink(marketprice)).then(resp => resp.json())
-//     .then(json => 
-//         {
-//         currentPrice = json.contents.marketprice
-            
-//         currentPrice = parseInt(currentPrice,10)
+function doFetch(marketprice){
+    fetch(apiLink(marketprice)).then(resp => resp.json())
+    .then(json => 
+        {
+        console.log("from fetch"+json.contents.marketprice)
+        currentPrice = json.contents.marketprice
+        divContent.textContent = `Today's current stock price is ₹${currentPrice}`
+
         
-//     })
-// }
+        
+    })
+}
 
-// doFetch("today's market price")
+doFetch("today's market price")
 
 
 
-divContent.textContent = `Today's current stock price is ₹${currentPrice}`
 
 function calcProfitLoss(){
     let textPrice = priceEvent.value
@@ -84,7 +91,7 @@ function calcProfitLoss(){
         }
         else{
             console.log("You earned neither profit nor loss \n1.Maybe you bought stocks today itself:)\n2.There is no rise or fall in the stocks you bought")
-            datapl =  `<li>You earned neither profit nor loss</li>
+            datapl =  `<li>You earned <strong>neither profit nor loss</strong></li>
             <h4>1.Maybe you bought stocks today itself:)</h4>
             <h4>2.There is no rise or fall in the stocks since the day you bought<h4>
             </li>`
